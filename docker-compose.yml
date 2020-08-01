@@ -1,0 +1,8 @@
+hw4:
+  build: .
+  ports:
+    - "8888:8888"
+  volumes:
+    - ./:/home/jovyan/data
+  restart: unless-stopped
+  
