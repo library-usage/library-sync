@@ -1,0 +1,1 @@
+conda env export --name base > /home/jovyan/data/environment.yml
