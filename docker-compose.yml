@@ -4,5 +4,7 @@ hw4:
     - "8888:8888"
   volumes:
     - ./:/home/jovyan/data
+  environment:
+  - API_KEY=$API_KEY
   restart: unless-stopped
   
