@@ -21,9 +21,6 @@ jobs:
         with:
           auto-update-conda: true
           python-version: 3.7
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-    # Runs a single command using the runners shell
     - name: run python script to make chart
       run: |
         conda install -y install requests pandas altair
