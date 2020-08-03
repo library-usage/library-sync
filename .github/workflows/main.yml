@@ -15,15 +15,16 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     name: Ex2 Linux
-    runs-on: ubuntu-latest
+    runs-on: "ubuntu-latest"
     steps:
       - uses: goanpeca/setup-miniconda@v1
         with:
+          miniconda-version: "latest"
           auto-update-conda: true
           python-version: 3.7
-    - name: run python script to make chart
-      run: |
-        conda install -y install requests pandas altair
-        ls
-        python pull-library-data.py
+      - name: run python script to make chart
+        run: |
+          conda install -y install requests pandas altair
+          ls
+          python pull-library-data.py
 
