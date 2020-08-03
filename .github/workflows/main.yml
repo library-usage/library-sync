@@ -24,7 +24,7 @@ jobs:
     # Runs a single command using the runners shell
     - name: run python script to make chart
       run: |
-        sudo apt-get install python3-pip
+        sudo apt-get install python3-pip python-setuptools
         python3 -m pip install --upgrade pip
         python3 -m pip install requests pandas altair
         ls
