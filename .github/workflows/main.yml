@@ -16,7 +16,9 @@ jobs:
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-
+        with:
+          auto-update-conda: true
+          python-version: 3.7
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -24,9 +26,7 @@ jobs:
     # Runs a single command using the runners shell
     - name: run python script to make chart
       run: |
-        sudo apt-get install python3-pip python-setuptools
-        python3 -m pip install --upgrade pip
-        python3 -m pip install requests pandas altair
+        conda install -y install requests pandas altair
         ls
-        python3 pull-library-data.py
+        python pull-library-data.py
 
