@@ -24,7 +24,7 @@ jobs:
           python-version: 3.7
       - name: run python script to make chart
         run: |
-          conda install -y install requests pandas altair
+          conda install -y requests pandas altair
           ls
           python pull-library-data.py
 
