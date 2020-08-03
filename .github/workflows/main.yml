@@ -23,6 +23,7 @@ jobs:
           miniconda-version: "latest"
           auto-update-conda: true
           python-version: 3.7
+          activate-environment: libraries
       - name: run python script to make chart
         run: |
           conda install -y requests pandas altair
