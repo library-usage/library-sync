@@ -21,15 +21,11 @@ jobs:
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
-    - name: Set up Python 3.8
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.8
     # Runs a single command using the runners shell
     - name: run python script to make chart
       run: |
-        python -m pip install --upgrade pip
+        python3 -m pip install --upgrade pip
         pip install requests pandas altair
         ls
-        python pull-library-data.py
+        python3 pull-library-data.py
 
