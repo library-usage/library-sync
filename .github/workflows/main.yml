@@ -19,6 +19,7 @@ jobs:
     steps:
       - run: |
           conda install -y requests pandas altair
+          cd ~/
           git clone https://github.com/library-usage/library-sync.git
           ls
           python pull-library-data.py
