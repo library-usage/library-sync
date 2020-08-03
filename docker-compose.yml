@@ -7,4 +7,4 @@ hw4:
   environment:
   - API_KEY=$API_KEY
   restart: unless-stopped
-  
+  command: ["start-notebook.sh"]
