@@ -17,9 +17,9 @@ jobs:
     runs-on: ubuntu-latest
     container: jupyter/minimal-notebook
     steps:
-      - uses: actions/checkout@v2
       - run: |
           conda install -y requests pandas altair
+          git clone https://github.com/library-usage/library-sync.git
           ls
           python pull-library-data.py
 
