@@ -23,7 +23,7 @@ jobs:
       run: |
         pip install update
         pip install pandas requests
-        
+        python pull-data.py
 
 
     # container: docker.pkg.github.com/library-usage/library-sync/sync:latest
