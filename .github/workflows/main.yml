@@ -6,7 +6,9 @@ name: CI
 # events but only for the master branch
 on:
   push:
-    branches: [ master ]
+    branches:
+    - master
+    - conda-base
   pull_request:
     branches: [ master ]
 
@@ -15,12 +17,21 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     runs-on: ubuntu-latest
-    container: jupyter/minimal-notebook
     steps:
-      - run: |
-          conda install -y requests pandas altair
-          cd ~/
-          git clone https://github.com/library-usage/library-sync.git
-          ls
-          python pull-library-data.py
+    - uses: actions/checkout@v2
+    - name: Update sync
+      run: |
+        pip install update
+        pip install pandas requests
+        
+
+
+    # container: docker.pkg.github.com/library-usage/library-sync/sync:latest
+    # steps:
+    #   - run: |
+    #       python 
+    #       cd ~/
+    #       git clone https://github.com/library-usage/library-sync.git
+    #       ls
+    #       python pull-library-data.py
 
