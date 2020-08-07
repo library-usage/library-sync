@@ -15,10 +15,13 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
-  build:
+  pull_data:
+    name: Pull data from libraries.io
     runs-on: ubuntu-latest
     steps:
+    - shell: bash
     - uses: actions/checkout@v2
+    - uses: actions/upload-artifact@v2
     - name: Update sync
       run: |
         pip install update
