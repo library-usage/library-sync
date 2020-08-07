@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[11]:
+# In[1]:
 
 
 import requests
@@ -10,15 +10,9 @@ import altair as alt
 import os
 
 
-# In[13]:
-
-
-
-
-
 # ## Setup API
 
-# In[9]:
+# In[11]:
 
 
 class Libraries:
@@ -39,7 +33,7 @@ class Libraries:
         return
     
     def load_api_key(self):
-        if self.api_from_env:
+        if not self.api_from_env:
             with open(self.api_file_path, 'r') as file:
                 self.api_key = file.read()
         else:
@@ -67,23 +61,47 @@ class Libraries:
         
         return self.json_flat
     
-lib = Libraries()
-data = lib.get_package(repository='Pypi', package='numpy')
+    def get_repository(self, repository='Pypi', package='requests'):
+        self.url = 'https://libraries.io/api/{}/{}'.format(repository, package)
+        self.get_response()
+        self.json = self.r.json()
+        self.json_flat = self.r.json()
+        del self.json_flat['versions']
+        del self.json_flat['normalized_licenses']
+        del self.json_flat['keywords']
+        del self.json_flat['latest_stable_release']
+        
+        return self.json_flat
+    
+lib = Libraries(api_from_env=True)
+data = lib.get_package(repository='Pypi', package='seaborn')
+
+
+# In[12]:
+
+
+lib.json
+
+
+# In[ ]:
+
+
+lib.
 
 
 # # Create csv of data from packages
 
-# In[3]:
+# In[20]:
 
 
 packages = [
-    ['Pypi', 'numpy'],
-    ['Pypi', 'requests'],
+    ['Pypi', 'seaborn'],
+    ['Pypi', 'matplotlib'],
     ['Pypi', 'plotly'],
-    ['Pypi', 'scipy'],
+    ['Pypi', 'bokeh'],
     ['Pypi', 'altair']
 ]
-lib = Libraries()
+lib = Libraries(api_from_env=True)
 
 def make_dataframe(packages, lib):
     package_dict = dict()
@@ -97,7 +115,7 @@ df =make_dataframe(packages, lib)
 df.to_csv('package-data.csv')
 
 
-# In[4]:
+# In[21]:
 
 
 df
@@ -105,7 +123,7 @@ df
 
 # # Create vega-lite visualization using csv
 
-# In[5]:
+# In[22]:
 
 
 url = 'https://raw.githubusercontent.com/library-usage/library-sync/master/package-data.csv'
@@ -119,10 +137,65 @@ chart = alt.Chart(url, width=400, height=400).mark_point().encode(
 chart
 
 
-# In[6]:
+# In[23]:
 
 
 chart.save('stars.json')
+
+
+# In[25]:
+
+
+import altair as alt
+from vega_datasets import data
+from altair import datum
+
+url = 'https://raw.githubusercontent.com/library-usage/library-sync/master/package-data.csv'
+parallel = alt.Chart(url).transform_window(
+    index='count()'
+).transform_fold(
+    ['dependent_repos_count', 'dependents_count', 'stars', 'forks']
+).transform_joinaggregate(
+     min='min(value)',
+     max='max(value)',
+     groupby=['key']
+).transform_calculate(
+    minmax_value=(datum.value-datum.min)/(datum.max-datum.min),
+    mid=(datum.min+datum.max)/2
+).mark_line().encode(
+    x='key:N',
+    y='minmax_value:Q',
+    color='name:N',
+#     detail='index:N',
+    opacity=alt.value(0.5)
+).properties(width=500).interactive()
+parallel
+
+
+# In[26]:
+
+
+parallel.save('parallel.json')
+
+
+# In[ ]:
+
+
+url = 'https://raw.githubusercontent.com/library-usage/library-sync/master/package-data.csv'
+
+parallel = alt.Chart(url, width=400, height=400).mark_point().encode(
+    x='rank:Q',
+    y='stars:Q',
+    color='name:N',
+    tooltip='name:N',
+).interactive()
+chart
+
+
+# In[ ]:
+
+
+
 
 
 # In[7]:
