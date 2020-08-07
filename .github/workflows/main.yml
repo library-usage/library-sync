@@ -18,8 +18,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: download data 
+    - name: checkout
+      uses: actions/checkout@v2
+    - name: download updated data 
       run: |
         pip install update
         pip install pandas requests
@@ -33,7 +34,18 @@ jobs:
       with:
         name: package-data
         path: package-data.csv 
-
+    - name: Commit files # commit the output folder
+      run: |
+        git config --local user.email "test@github.com"
+        git config --local user.name "GitHub Actions"
+        git add package-data.csv
+        git commit -m "Update package-data from GitHub Actions"
+    - name: Push changes # push the output folder to your repo
+      uses: ad-m/github-push-action@master
+      with:
+        branch: conda-base #ignore if your branch is master
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        force: true
 
     # container: docker.pkg.github.com/library-usage/library-sync/sync:latest
     # steps:
