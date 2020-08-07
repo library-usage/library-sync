@@ -8,7 +8,6 @@ on:
   push:
     branches:
     - master
-    - conda-base
   pull_request:
     branches: [ master ]
 
@@ -43,16 +42,7 @@ jobs:
     - name: Push changes # push the output folder to your repo
       uses: ad-m/github-push-action@master
       with:
-        branch: conda-base #ignore if your branch is master
+        branch: master #ignore if your branch is master
         github_token: ${{ secrets.GITHUB_TOKEN }}
         force: true
-
-    # container: docker.pkg.github.com/library-usage/library-sync/sync:latest
-    # steps:
-    #   - run: |
-    #       python 
-    #       cd ~/
-    #       git clone https://github.com/library-usage/library-sync.git
-    #       ls
-    #       python pull-library-data.py
 
