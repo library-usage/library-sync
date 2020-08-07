@@ -16,12 +16,10 @@ on:
 jobs:
   # This workflow contains a single job called "build"
   pull_data:
-    name: Pull data from libraries.io
     runs-on: ubuntu-latest
     steps:
     - shell: bash
     - uses: actions/checkout@v2
-    - uses: actions/upload-artifact@v2
     - name: Update sync
       run: |
         pip install update
