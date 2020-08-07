@@ -12,7 +12,7 @@ import os
 
 # ## Setup API
 
-# In[11]:
+# In[2]:
 
 
 class Libraries:
@@ -77,21 +77,15 @@ lib = Libraries(api_from_env=True)
 data = lib.get_package(repository='Pypi', package='seaborn')
 
 
-# In[12]:
+# In[3]:
 
 
 lib.json
 
 
-# In[ ]:
-
-
-lib.
-
-
 # # Create csv of data from packages
 
-# In[20]:
+# In[21]:
 
 
 packages = [
@@ -99,7 +93,12 @@ packages = [
     ['Pypi', 'matplotlib'],
     ['Pypi', 'plotly'],
     ['Pypi', 'bokeh'],
-    ['Pypi', 'altair']
+    ['Pypi', 'altair'],
+    ['Pypi', 'pygal'],
+    ['Pypi', 'geoplotlib'],
+    ['Pypi', 'geoplotlib'],
+
+
 ]
 lib = Libraries(api_from_env=True)
 
@@ -113,42 +112,84 @@ def make_dataframe(packages, lib):
         
 df =make_dataframe(packages, lib)
 df.to_csv('package-data.csv')
+df['1k_stars'] = df['stars']/1000
+df['1k_stars'] = df['1k_stars'].astype('int64')
 
 
-# In[21]:
+# In[22]:
 
 
 df
 
 
+# In[ ]:
+
+
+
+
+
 # # Create vega-lite visualization using csv
 
-# In[22]:
+# In[26]:
+
+
+local = df
+
+alt.Chart(local, width=400, height=400).mark_point().encode(
+    x='rank:Q',
+    y='1k_stars:Q',
+    color='name:N',
+    tooltip='name:N',
+).interactive()
+
+
+# In[24]:
 
 
 url = 'https://raw.githubusercontent.com/library-usage/library-sync/master/package-data.csv'
 
 chart = alt.Chart(url, width=400, height=400).mark_point().encode(
     x='rank:Q',
-    y='stars:Q',
+    y='1k_stars:Q',
     color='name:N',
     tooltip='name:N',
 ).interactive()
 chart
 
 
-# In[23]:
+# In[25]:
 
 
 chart.save('stars.json')
 
 
-# In[25]:
+# In[30]:
 
 
-import altair as alt
-from vega_datasets import data
-from altair import datum
+local = df
+alt.Chart(local).transform_window(
+    index='count()'
+).transform_fold(
+    ['dependent_repos_count', 'dependents_count', '1k_stars', 'forks']
+).transform_joinaggregate(
+     min='min(value)',
+     max='max(value)',
+     groupby=['key']
+).transform_calculate(
+    minmax_value=(datum.value-datum.min)/(datum.max-datum.min),
+    mid=(datum.min+datum.max)/2
+).mark_line().encode(
+    x='key:N',
+    y='minmax_value:Q',
+    color='name:N',
+    tooltip='name:N',
+#     detail='index:N',
+    opacity=alt.value(0.5)
+).properties(width=500).interactive()
+
+
+# In[13]:
+
 
 url = 'https://raw.githubusercontent.com/library-usage/library-sync/master/package-data.csv'
 parallel = alt.Chart(url).transform_window(
@@ -166,19 +207,20 @@ parallel = alt.Chart(url).transform_window(
     x='key:N',
     y='minmax_value:Q',
     color='name:N',
+    tooltip='name:N',
 #     detail='index:N',
     opacity=alt.value(0.5)
 ).properties(width=500).interactive()
 parallel
 
 
-# In[26]:
+# In[10]:
 
 
 parallel.save('parallel.json')
 
 
-# In[ ]:
+# In[11]:
 
 
 url = 'https://raw.githubusercontent.com/library-usage/library-sync/master/package-data.csv'
@@ -198,8 +240,14 @@ chart
 
 
 
-# In[7]:
+# In[12]:
 
 
 get_ipython().system('jupyter nbconvert --to script pull-library-data.ipynb')
+
+
+# In[ ]:
+
+
+
 
