@@ -18,7 +18,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+      uses: actions/checkout@v2
+      uses: actions/upload-artifact@v2
     - name: Update sync
       run: |
         pip install update
@@ -29,7 +30,9 @@ jobs:
         cat ./package-data.csv
       env: 
         API_KEY: ${{ secrets.API_KEY }}
-
+      with:
+        name: package-data
+        path: package-data.csv 
 
 
     # container: docker.pkg.github.com/library-usage/library-sync/sync:latest
