@@ -33,6 +33,7 @@
 
   </script>
   <h2>Cool parallelellel plot</h2>
+  <div id="vis2"></div>
   <script>
     (function(vegaEmbed) {
       var spec ="https://raw.githubusercontent.com/library-usage/library-sync/master/parallel.json";
@@ -46,11 +47,10 @@
                           + '</div>');
           throw error;
       }
-      const el = document.getElementById('vis');
-      vegaEmbed("#vis", spec, embedOpt)
+      const el = document.getElementById('vis2');
+      vegaEmbed("#vis2", spec, embedOpt)
         .catch(error => showError(el, error));
     })(vegaEmbed);
-
   </script> 
 </body>
 </html>
