@@ -1,0 +1,45 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  schedule:
+    - cron: "0 8 * * *"
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: checkout
+      uses: actions/checkout@v2
+    - name: download updated data 
+      run: |
+        pip install update
+        pip install pandas requests
+        python pull-data.py
+        ls
+        cat ./package-data.csv
+      env: 
+        API_KEY: ${{ secrets.API_KEY }}
+    - name: post artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: package-data
+        path: package-data.csv 
+    - name: Commit files # commit the output folder
+      run: |
+        git config --local user.email "test@github.com"
+        git config --local user.name "GitHub Actions"
+        git add package-data.csv
+        git commit -m "Update package-data from GitHub Actions"
+    - name: Push changes # push the output folder to your repo
+      uses: ad-m/github-push-action@master
+      with:
+        branch: master #ignore if your branch is master
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        force: true
+

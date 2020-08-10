@@ -32,5 +32,25 @@
     })(vegaEmbed);
 
   </script>
+  <h2>Cool parallelellel plot</h2>
+  <div id="vis2"></div>
+  <script>
+    (function(vegaEmbed) {
+      var spec ="https://raw.githubusercontent.com/library-usage/library-sync/master/parallel.json";
+      var embedOpt = {"mode": "vega-lite"};
+
+      function showError(el, error){
+          el.innerHTML = ('<div class="error" style="color:red;">'
+                          + '<p>JavaScript Error: ' + error.message + '</p>'
+                          + "<p>This usually means there's a typo in your chart specification. "
+                          + "See the javascript console for the full traceback.</p>"
+                          + '</div>');
+          throw error;
+      }
+      const el = document.getElementById('vis2');
+      vegaEmbed("#vis2", spec, embedOpt)
+        .catch(error => showError(el, error));
+    })(vegaEmbed);
+  </script> 
 </body>
 </html>

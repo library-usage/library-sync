@@ -1,4 +1,6 @@
-FROM jupyter/minimal-notebook
+FROM python
 
-RUN conda install -y altair vega_datasets numpy pandas matplotlib requests
+RUN pip install update \
+    && pip install pandas requests
 
+COPY pull-data.py .

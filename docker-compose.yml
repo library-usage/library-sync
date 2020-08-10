@@ -1,8 +1,19 @@
-hw4:
-  build: .
-  ports:
-    - "8888:8888"
-  volumes:
-    - ./:/home/jovyan/data
-  restart: unless-stopped
-  
+version: '3'
+services:
+  dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.develop
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./:/home/jovyan/data
+    environment:
+    - API_KEY=$API_KEY
+    restart: unless-stopped
+    command: ["start-notebook.sh"]
+  base:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: docker.pkg.github.com/library-usage/library-sync/sync
