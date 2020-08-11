@@ -1,0 +1,7 @@
+dash
+gunicorn
+numpy
+pandas
+uszipcode
+plotly
+networkx
